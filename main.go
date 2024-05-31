@@ -10,8 +10,8 @@ import (
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /", handlers.RootHandler)
-	mux.HandleFunc("GET /favicon.ico", handlers.FaviconHandler)
+	mux.HandleFunc("/", handlers.Ro)
+	mux.HandleFunc("/favicon.ico", handlers.FaviconHandler)
 
 	fmt.Println("Server started at: http://localhost:8080")
 	if err := http.ListenAndServe("localhost:8080", mux); err != nil {
