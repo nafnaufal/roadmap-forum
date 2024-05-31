@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/nafnaufal/roadmap-forum/handlers"
+	"github.com/nafnaufal/roadmap-forum/internal/handlers"
 )
 
 func main() {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", handlers.RootHandler)
+	mux.HandleFunc("/", handlers.Ro)
 	mux.HandleFunc("/favicon.ico", handlers.FaviconHandler)
 
 	fmt.Println("Server started at: http://localhost:8080")
