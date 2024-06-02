@@ -1,38 +1,32 @@
 package db
 
 import (
-	"fmt"
+	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
 
-func ConnectToNeo4j() (neo4j.Session, error) {
-	if err := godotenv.Load(); err != nil {
-		fmt.Println("Error loading .env file:", err)
-	}
+var driver neo4j.Driver
 
+func InitDB() {
 	uri := os.Getenv("NEO4J_URI")
 	username := os.Getenv("NEO4J_USERNAME")
 	password := os.Getenv("NEO4J_PASSWORD")
+	var err error
 
-	driver, err := neo4j.NewDriver(uri, neo4j.BasicAuth(username, password, ""))
+	driver, err = neo4j.NewDriver(uri, neo4j.BasicAuth(username, password, ""))
 	if err != nil {
-		return nil, err
+		log.Fatalf("Failed to create driver: %v", err)
 	}
-	session := driver.NewSession(neo4j.SessionConfig{})
-	return session, nil
 }
 
-func RunCypherQuery(session neo4j.Session, query string, params map[string]interface{}) (neo4j.Result, error) {
-	result, err := session.Run(query, params)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
+func GetDriver() neo4j.Driver {
+	return driver
 }
 
-func CloseSession(session neo4j.Session) {
-	session.Close()
+func CloseDB() {
+	if driver != nil {
+		driver.Close()
+	}
 }
